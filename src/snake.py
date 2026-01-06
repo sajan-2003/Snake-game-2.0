@@ -1,21 +1,31 @@
-#snake logic (movement, collisions)
 def move_snake(snake, direction):
-    """Move snake in the given direction."""
-    head = snake[0].copy()
-    if direction == "DOWN":
-        head[0] += 1
-    elif direction == "UP":
-        head[0] -= 1
+    """Move the snake in the given direction"""
+    head_y, head_x = snake[0]
+
+    if direction == "UP":
+        new_head = [head_y - 1, head_x]
+    elif direction == "DOWN":
+        new_head = [head_y + 1, head_x]
     elif direction == "LEFT":
-        head[1] -= 1
+        new_head = [head_y, head_x - 1]
     elif direction == "RIGHT":
-        head[1] += 1
-    snake.insert(0, head)
+        new_head = [head_y, head_x + 1]
+    else:
+        new_head = [head_y, head_x]
+
+    snake.insert(0, new_head)
     return snake
 
 def check_collision(snake, screen_height, screen_width):
-    """Check if snake hits wall or itself."""
-    head = snake[0]
-    if head in snake[1:] or head[0] in [0, screen_height] or head[1] in [0, screen_width]:
+    """Return True if snake hits wall or itself"""
+    head_y, head_x = snake[0]
+
+    # Wall collision (consider border)
+    if head_y <= 0 or head_y >= screen_height - 1 or head_x <= 0 or head_x >= screen_width - 1:
         return True
+
+    # Self collision
+    if [head_y, head_x] in snake[1:]:
+        return True
+
     return False
