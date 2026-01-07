@@ -21,5 +21,5 @@ Play the classic **Snake game** directly in your terminal. Written in **Python**
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/sajan-chamika/python-terminal-snake.git
+git clone https://github.com/sajan-2003/python-terminal-snake.git
 cd python-terminal-snake
