@@ -1,4 +1,4 @@
-import pygame
+import pygame # type: ignore
 import sys
 from snake import move_snake, check_collision
 from food import spawn_food
