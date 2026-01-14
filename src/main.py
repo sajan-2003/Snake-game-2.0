@@ -1,7 +1,8 @@
-import pygame # type: ignore
+import pygame 
 import sys
 from snake import move_snake, check_collision
 from food import spawn_food
+from obstacles import generate_obstacles, check_obstacle_collision
 
 # Game constants
 GRID_WIDTH = 20  # Grid cells
@@ -33,6 +34,7 @@ class SnakeGame:
                       [GRID_HEIGHT//2, GRID_WIDTH//4-1], 
                       [GRID_HEIGHT//2, GRID_WIDTH//4-2]]
         self.food = spawn_food(self.snake, GRID_HEIGHT, GRID_WIDTH)
+        self.obstacles = generate_obstacles(GRID_HEIGHT, GRID_WIDTH, num_obstacles=8, snake=self.snake, food=self.food)
         self.current_direction = "RIGHT"
         self.score = 0
         self.game_over = False
@@ -75,6 +77,9 @@ class SnakeGame:
             if check_collision(self.snake, GRID_HEIGHT, GRID_WIDTH):
                 self.game_over = True
             
+            if check_obstacle_collision(self.snake[0], self.obstacles):
+                self.game_over = True
+            
             if self.snake[0] == self.food:
                 self.score += 1
                 self.food = spawn_food(self.snake, GRID_HEIGHT, GRID_WIDTH)
@@ -89,6 +94,12 @@ class SnakeGame:
             pygame.draw.line(self.screen, (40, 40, 40), (x, 0), (x, SCREEN_HEIGHT - 50))
         for y in range(0, SCREEN_HEIGHT - 50, CELL_SIZE):
             pygame.draw.line(self.screen, (40, 40, 40), (0, y), (SCREEN_WIDTH, y))
+        
+        # Draw obstacles
+        for y, x in self.obstacles:
+            obs_rect = pygame.Rect(x * CELL_SIZE + 1, y * CELL_SIZE + 1, CELL_SIZE - 2, CELL_SIZE - 2)
+            pygame.draw.rect(self.screen, (150, 150, 150), obs_rect)
+            pygame.draw.rect(self.screen, WHITE, obs_rect, 2)
         
         # Draw snake
         for i, (y, x) in enumerate(self.snake):
